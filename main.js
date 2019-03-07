@@ -60,14 +60,22 @@ const RedditApp = function() {
 
     $clickedPost.find('.comment-post').toggleClass('show');
     $toggleCommentsHiddenIndicator.toggleClass('comments-hidden');
-  }  
+  }
+
+  // When the add comment icon is clicked it will show or hide the add comments section for that specific post
+  
+  const toggleAddComments = function(currentPost) {
+    const $addShowComments = $(currentPost).closest(".post-text").find(".add-comment");
+    $addShowComments.toggleClass('show-add-comment');
+  }
 
   return {
     createPost: createPost,
     removePost: removePost,
     renderPosts: renderPosts,
     renderComments: renderComments,
-    toggleComments: toggleComments
+    toggleComments: toggleComments,
+    toggleAddComments: toggleAddComments
   }
 }
 
@@ -106,15 +114,10 @@ $('#add-post').on('click', function() {
     }
   });
   
-  /* This function generates click events for each dynamically created comment icon.  When the icon
-     is clicked it will show or hide the add comments section for that specific post */
+  // This function generates click events for each dynamically created comment icon.  
   
-  $(document).on("click", ".comment", function() {
-    if($(this).closest(".post-text").find(".add-comment").hasClass('show-add-comment')) {
-      $(this).closest(".post-text").find(".add-comment").removeClass('show-add-comment');
-    } else {
-      $(this).closest(".post-text").find(".add-comment").addClass('show-add-comment');
-    }
+  $('.posts').on("click", ".comment", function() {
+    app.toggleAddComments(this);
   });
   
   /* This function generates click events for each dynamically created edit post icon.  When the icon
