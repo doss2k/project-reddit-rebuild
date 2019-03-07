@@ -50,13 +50,24 @@ const RedditApp = function() {
 
   }
 
-  
+  /* When the hide/show comments icon is clicked for a specific post it hides or shows all of the comments 
+     on that specific post.  If the comments are hidden it gives an indication that the comments are hidden 
+     beside the icon row */
+
+  const toggleComments = function (currentPost) {
+    const $clickedPost = $(currentPost).closest('.userpost');
+    const $toggleCommentsHiddenIndicator = $(currentPost).closest(".icon-row").find(".hidden-comments");
+
+    $clickedPost.find('.comment-post').toggleClass('show');
+    $toggleCommentsHiddenIndicator.toggleClass('comments-hidden');
+  }  
 
   return {
     createPost: createPost,
     removePost: removePost,
     renderPosts: renderPosts,
-    renderComments: renderComments
+    renderComments: renderComments,
+    toggleComments: toggleComments
   }
 }
 
@@ -78,7 +89,7 @@ $('#add-post').on('click', function() {
 /* This function generates click events for each dynamically created delete post button.  It also
    confirms with the user they want to delete the post before doing so. */
 
-   $('.posts').on("click", ".delete-post", function() {
+  $('.posts').on("click", ".delete-post", function() {
     let confirmDeletePost = confirm("Are you sure you want to delete this post?");
     if(confirmDeletePost) {
       app.removePost(this);
@@ -156,18 +167,10 @@ $('#add-post').on('click', function() {
     $(this).closest(".edit-comment").removeClass('show-add-comment'); 
   });
   
-  /* This function generates click events for each dynamically created hide/show comments button.  When 
-     clicked it hides or shows all of the comments on that specific post.  If the comments are hidden
-     it gives an indication that the comments are hidden beside the icon row */
-  
-  $(document).on("click", ".hide-comment", function() {
-    if($(this).closest(".post-text").find(".comment-post").hasClass('show')) {
-      $(this).closest(".post-text").find(".comment-post").removeClass('show');
-      $(this).closest(".icon-row").find(".hidden-comments").addClass('comments-hidden');
-    } else {
-      $(this).closest(".post-text").find(".comment-post").addClass('show');
-      $(this).closest(".icon-row").find(".hidden-comments").removeClass('comments-hidden');
-    }
+  // This function generates click event handlers for each dynamically created hide/show comments button.
+   
+  $('.posts').on("click", ".hide-comment", function() {
+    app.toggleComments(this);
   });
   
   // This function creates and returns a timestamp 
