@@ -36,11 +36,27 @@ const RedditApp = function() {
     $('#message').val('');
   }
 
+  const removePost = function (currentPost) {
+    const $clickedPost = $(currentPost).closest('.userpost');
+
+    const index = $clickedPost.index();
+
+    posts.splice(index, 1);
+    $clickedPost.remove();
+  }
+
+  const renderComments = function() {
+    $('.comments-post').empty();
+
+  }
+
   
 
   return {
     createPost: createPost,
-    renderPosts: renderPosts
+    removePost: removePost,
+    renderPosts: renderPosts,
+    renderComments: renderComments
   }
 }
 
@@ -62,10 +78,10 @@ $('#add-post').on('click', function() {
 /* This function generates click events for each dynamically created delete post button.  It also
    confirms with the user they want to delete the post before doing so. */
 
-   $(document).on("click", ".delete-post", function() {
+   $('.posts').on("click", ".delete-post", function() {
     let confirmDeletePost = confirm("Are you sure you want to delete this post?");
     if(confirmDeletePost) {
-      $(this).closest('.userpost').remove();
+      app.removePost(this);
     }
   });
   
